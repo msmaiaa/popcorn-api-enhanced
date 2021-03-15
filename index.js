@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const movies = require('./src/routes/movies')
 const animes = require('./src/routes/animes')
 const shows = require('./src/routes/shows')
-const populateDB = require('./src/populate');
+const db = require('./src/populate');
 
 
 app.use('/movies', movies);
@@ -21,10 +21,11 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser:true, useUnifiedTopolog
   console.log('Connected to Mongo database');
   setInterval(()=>{
     console.log('Starting database populate')
-    populateDatabase(['movies', 'shows', 'animes'])
+    db.populateDatabase(['movies', 'shows', 'animes'])
   },process.env.CHECK_TIME_MIN * 6000)
 })
-.catch(()=>{
+.catch((e)=>{
+  console.log(e);
   console.log('Error while trying to connect to the MongoDB database');
 })
 
