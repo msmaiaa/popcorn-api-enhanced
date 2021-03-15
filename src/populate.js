@@ -45,7 +45,6 @@ const getPageInfo = async(type, page, url1)=>{
     const url = `${url1}${type}/${page}?sort=trending`
     try{
       let pageInfo = await axios.get(url)
-      console.log(url)
       if(pageInfo.data.length >= 1){
         if(type == 'shows'){
           return await getInfo(pageInfo.data)

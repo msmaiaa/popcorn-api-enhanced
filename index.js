@@ -19,11 +19,10 @@ app.use((req,res,next)=>{
 mongoose.connect(process.env.MONGO_URI, {useNewUrlParser:true, useUnifiedTopology:true})
 .then(()=>{
   console.log('Connected to Mongo database');
-  // console.time("dbsave");
-  // populateDatabase(['movies', 'shows', 'animes'])
-  // .then(()=>{
-  //   console.timeEnd("dbsave");
-  // })
+  setInterval(()=>{
+    console.log('Starting database populate')
+    populateDatabase(['movies', 'shows', 'animes'])
+  },process.env.CHECK_TIME_MIN * 6000)
 })
 .catch(()=>{
   console.log('Error while trying to connect to the MongoDB database');
@@ -32,7 +31,3 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser:true, useUnifiedTopolog
 app.listen(process.env.PORT, process.env.HOST,()=>{
   console.log('Listening at port '+ process.env.PORT);
 })
-
-setTimeout(()=>{
-  populateDB.populateDatabase(['shows'])
-}, 2000)
