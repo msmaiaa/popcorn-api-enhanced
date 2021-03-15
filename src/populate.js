@@ -5,6 +5,7 @@ const Movie = require('./models/Movie');
 const Show = require('./models/Show');
 const animeApi = 'https://tv-v2.api-fetch.sh/';
 const popApi = 'http://popcorn-ru.tk/';
+const mongoose = require('mongoose');
 
 const genres = {
     animes: allGenres.animeGenres,
@@ -158,3 +159,16 @@ const getTotalPages = async(url) =>{
 }
 
 exports.populateDatabase = populateDatabase;
+
+if (require.main === module) {
+  mongoose.connect(process.env.MONGO_URI, {useNewUrlParser:true, useUnifiedTopology:true})
+  .then(()=>{
+    console.log('Connected to Mongo database');
+    populateDatabase(['movies', 'shows', 'animes'])
+  })
+  .catch((e)=>{
+    console.log(e);
+    console.log('Error while trying to connect to the MongoDB database');
+  })
+  populateDatabase(['shows', 'animes', 'movies'])
+}
