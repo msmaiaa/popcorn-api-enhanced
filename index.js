@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const movies = require('./src/routes/movies')
 const animes = require('./src/routes/animes')
 const shows = require('./src/routes/shows')
-
+const populateDB = require('./src/populate');
 
 
 app.use('/movies', movies);
@@ -33,6 +33,6 @@ app.listen(process.env.PORT, process.env.HOST,()=>{
   console.log('Listening at port '+ process.env.PORT);
 })
 
-// setTimeout(()=>{
-//   populateDatabase(['movies'])
-// }, 2000)
+setTimeout(()=>{
+  populateDB.populateDatabase(['shows'])
+}, 2000)

@@ -1,8 +1,8 @@
 const axios = require('axios');
-const allGenres = require('./src/consts');
-const Anime = require('./src/models/Anime');
-const Movie = require('./src/models/Movie');
-const Show = require('./src/models/Show');
+const allGenres = require('./consts');
+const Anime = require('./models/Anime');
+const Movie = require('./models/Movie');
+const Show = require('./models/Show');
 const animeApi = 'https://tv-v2.api-fetch.sh/';
 const popApi = 'http://popcorn-ru.tk/';
 
@@ -24,18 +24,19 @@ const populateSingleCollection = async(type)=>{
   
   
   
-const getGenres = async(data) =>{
+const getInfo = async(data) =>{
     let newData = [...data]
     try{
       for(d of newData){
         const url = popApi + 'show/' + d._id;
         const content = await axios.get(url)
+        d.synopsis = content.data.synopsis;
         d.genres = content.data.genres;
       }
       return newData;
     }
     catch(e){
-      console.log('Error on getGenres');
+      console.log('Error on getInfo');
       return
     }
   }
@@ -47,7 +48,7 @@ const getPageInfo = async(type, page, url1)=>{
       console.log(url)
       if(pageInfo.data.length >= 1){
         if(type == 'shows'){
-          return await getGenres(pageInfo.data)
+          return await getInfo(pageInfo.data)
         }else{
           return pageInfo.data;
         }
@@ -107,7 +108,7 @@ const saveDoc = async(type, c) =>{
       }
       Anime.findOneAndUpdate(query, update, options, (err,result)=>{
         if(err){
-          console.log('Error while trying to save ' + c._title);
+          console.log('Error while trying to save ' + c.title);
         }
         return
       })
@@ -125,7 +126,8 @@ const saveDoc = async(type, c) =>{
       }
       Show.findOneAndUpdate(query, update, options, (err,result)=>{
         if(err){
-          console.log('Error while trying to save ' + c._title);
+          console.log(err);
+          console.log('Error while trying to save ' + c.title);
         }
         return
       })
@@ -143,7 +145,7 @@ const saveDoc = async(type, c) =>{
       }
       Movie.findOneAndUpdate(query, update, options, (err,result)=>{
         if(err){
-          console.log('Error while trying to save ' + c._title);
+          console.log('Error while trying to save ' + c.title);
         }
         return
       })
@@ -154,3 +156,5 @@ const getTotalPages = async(url) =>{
     const pages = await axios.get(url);
     return pages.data;
 }
+
+exports.populateDatabase = populateDatabase;
