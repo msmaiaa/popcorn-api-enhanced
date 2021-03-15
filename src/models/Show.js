@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const Show = new mongoose.Schema({
     _id: String,
@@ -21,5 +22,7 @@ const Show = new mongoose.Schema({
     },
     genres: [String],
 })
+
+Show.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Show', Show);

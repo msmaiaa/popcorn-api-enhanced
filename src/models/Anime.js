@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
+
 
 const Anime = new mongoose.Schema({
     _id: String,
@@ -21,5 +23,7 @@ const Anime = new mongoose.Schema({
     },
     genres: [String],
 })
+
+Anime.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Anime', Anime);

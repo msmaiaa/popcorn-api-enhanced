@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
+
 
 const Movie = new mongoose.Schema({
     _id: String,
@@ -20,5 +22,7 @@ const Movie = new mongoose.Schema({
         hated: Number,
     },
 })
+
+Movie.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Movie', Movie);
